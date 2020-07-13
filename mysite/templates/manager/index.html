@@ -68,7 +68,14 @@
                     <ul class="category-menu">
                       {% for  auth_category in auth_categories %}
                         <li>
-                          <a href="{% url 'shop-site:index' author=user.id category=auth_category.category.id %}">{{auth_category.category.title}}</a><span class="li-span"><i class="fa fa-pencil" aria-hidden="true" data-toggle="modal" data-target="#exampleModal"></i>&nbsp&nbsp<i class="fa fa-trash" aria-hidden="true"></i></span>
+                          <a href="{% url 'shop-site:index' author=user.id category=auth_category.category.id %}">
+                            {{auth_category.category.title}}
+                          </a>
+                          <span class="li-span">
+                            <i class="fa fa-pencil edit-category" data-id="{{auth_category.category.id}}" aria-hidden="true" data-toggle="modal" data-target="#exampleModal">
+                            </i>&nbsp&nbsp
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                          </span>
                         </li>
                       {% empty %}
                         <li>
@@ -105,8 +112,12 @@
                               <img src="{{product.file.url}}" alt="">
                             </a>
                             <div class="pi-links">
-                              <a href="#" class="wishlist-btn"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                              <a href="#" class="wishlist-btn"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                              <a href="#" class="wishlist-btn edit-product" data-id="{{product.id}}" data-toggle="modal" data-target="#productModal">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                              </a>
+                              <a href="#" class="wishlist-btn remove-product" data-id="{{product.id}}">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                              </a>
                             </div>
                           </div>
                           <div class="pi-text">
@@ -144,83 +155,52 @@
 {% endblock %}
 {% block modal %}
 <!-- Modal category -->
-  <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      	<form method="POST" action="">
-          {% csrf_token %}
-	        <div class="modal-content">
-	            <div class="modal-header">
-	              <h5 class="modal-title" id="exampleModalLabel">Заказать </h5>
-	              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	                <span aria-hidden="true">&times;</span>
-	              </button>
-	            </div>
-	            <div class="modal-body">
-  	            <div class="form-group">
-  	              <label for="exampleInputEmail1">Введите название категории</label> <br>
-  	              {{category_form.title|add_class:"form-control"}}
-  	            </div>
-	            </div>
-	            <div class="modal-footer">
-	              <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Закрыть</button>
-	              <input type="submit" name="category-submit" class="btn btn-sm btn-primary" value="Отправить">
-	            </div>
-	        </div>
-      	</form>
+  <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" id="category-content">
+      	{% include "manager/category_modal.html" %}
     </div>
   </div>
 <!-- Modal category end -->
 <!-- Modal product -->
-<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form method="POST" action="" enctype="multipart/form-data">
-          {% csrf_token %}
-          <input type="hidden" name="author" value="{{user.id}}">
-          <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Заказать </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Название продукта : </label>
-                  {{product_form.title|add_class:"form-control"}}
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Выберите изображения : </label>
-                  {{product_form.file|add_class:"form-control"}}
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Выберите категорию : </label>
-                  {{product_form.author_category|add_class:"form-control"}}
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Стоимость : </label>
-                  {{product_form.price|add_class:"form-control"}}
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Прежная стоимость (при акции) : </label>
-                  {{product_form.price_old|add_class:"form-control"}}
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Вывести в топ : </label> 
-                  {{product_form.is_top}}
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Выберите вид : </label> 
-                  {{product_form.kind|add_class:"form-control"}}
-                </div>
-                
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Закрыть</button>
-                <input type="submit" name="product-submit" class="btn btn-sm btn-primary" value="Отправить">
-              </div>
-          </div>
-        </form>
+<div class="modal fade" id="productModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" id="product-content">
+      {% include "manager/product_modal.html" %}
     </div>
   </div>
 <!-- Modal product end -->
+{% endblock %}
+{% block domready %}
+  // Извлечь данные продукта
+  $(document).on('click', '.edit-product', function(){
+    event.preventDefault()
+    var product_id = $(this).data('id')
+    $.ajax({
+      url: '',
+      type: 'GET',
+      data: {product_id: product_id},
+      error: function(jqXHR, textStatus, errorThrown){
+        alert(jqXHR.responseText)
+      },
+      success: function (data){
+        $('#product-content').html(data)
+      }
+    })
+  })
+
+  // Извлечь данные категории
+  $(document).on('click', '.edit-category', function(){
+    event.preventDefault()
+    var category_id = $(this).data('id')
+    $.ajax({
+      url: '',
+      type: 'GET',
+      data: {category_id: category_id},
+      error: function(jqXHR, textStatus, errorThrown){
+        alert(jqXHR.responseText)
+      },
+      success: function (data){
+        $('#category-content').html(data)
+      }
+    })
+  })
 {% endblock %}
