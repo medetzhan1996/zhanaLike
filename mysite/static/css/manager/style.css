@@ -4584,3 +4584,40 @@ a.badge-teal:focus, a.badge-teal.focus {
     margin-left: 70px;
   }
 }
+#settings-trigger {
+  position: fixed;
+  bottom: 50%;
+  right: 30px;
+  height: 45px;
+  width: 45px;
+  background: #fff;
+ /*  background: #28a745; */
+  z-index: 99;
+  border: 2px solid #b0afbd;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  border-radius: 100%;
+}
+
+#settings-trigger i {
+  color: #b0afbd;
+  font-size: 1.38rem;
+  line-height: 1rem; 
+  cursor: pointer;
+      padding-top: 5px;
+    padding-left: 2px;
+}
+
+.rtl #settings-trigger {
+  right: auto;
+  left: 30px;
+}
+.btn-s{
+  background:transparent;
+  border: none;
+  cursor: pointer;
+}

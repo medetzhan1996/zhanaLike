@@ -5,6 +5,9 @@
 {% block content %}
   <!-- main-panel-->
       <div class="main-panel">
+        <div class="theme-setting-wrapper">
+          <div id="settings-trigger"><button type="submit" class="btn-s"><i class="fa fa-check-square-o"></i></button></div>
+        </div>
         <div class="content-wrapper">
           <!-- Header section -->
             <header class="header-section">
@@ -45,29 +48,37 @@
               <section class="product-section">
                 <div class="container">
                   {{ product_form.errors }}
-                  <input type="submit" class="btn btn-sm btn-primary" name="" value="Сохранить">
+                  <!-- <input type="submit" class="btn btn-sm btn-primary" name="" value="Сохранить"> -->
                   <div class="row">
                     <div class="col-lg-6">
                       <div id="carouselExampleControls" class="carousel slide" data-ride="carousel"  data-interval="false" style="">
                         <div class="carousel-inner">
                           <div class="carousel-item active">
                             <div id="image-preview-extra" class="carusel-wh" style="{% background_image product.file %}">
-                              {{product_form.file}}
+                              <div class="box">
+                                {{product_form.file}}
+                              </div>
                             </div>
                           </div>
                           <div class="carousel-item">
                             <div id="image-preview-extra1" class="carusel-wh" style="{% background_image product.file_extra1 %}">
-                              {{product_form.file_extra1}}
+                              <div class="box">
+                                {{product_form.file_extra1}}
+                              </div>
                             </div>
                           </div>
                           <div class="carousel-item">
                             <div id="image-preview-extra2" class="carusel-wh" style="{% background_image product.file_extra2 %}">
-                              {{product_form.file_extra2}}
+                              <div class="box">
+                                {{product_form.file_extra2}}
+                              </div>
                             </div>
                           </div>
                           <div class="carousel-item">
                             <div id="image-preview-extra3" class="carusel-wh" style="{% background_image product.file_extra3 %}">
-                              {{product_form.file_extra3}}
+                              <div class="box">
+                                {{product_form.file_extra3}}
+                              </div>
                             </div>
                           </div>
                         </div>
