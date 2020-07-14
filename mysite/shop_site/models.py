@@ -16,7 +16,9 @@ class ItemBase(models.Model):
 
 # Список категории
 class Сategory(ItemBase):
-    pass
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+    )
 
     class Meta:
         db_table = "categories"
@@ -82,9 +84,9 @@ class Product(ItemBase):
         upload_to='images', blank=True, null=True)
     file_extra3 = models.FileField(
         upload_to='images', blank=True, null=True)
-    author_category = models.ForeignKey(AuthorСategory,
-                                        related_name='products_auth_category',
-                                        on_delete=models.CASCADE)
+    author_category = models.ForeignKey(
+        Сategory, related_name='products_category',
+        on_delete=models.CASCADE)
     description = HTMLField(blank=True, null=True)
     details = HTMLField(blank=True, null=True)
     shipping_return = HTMLField(blank=True, null=True)

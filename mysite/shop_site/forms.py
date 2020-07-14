@@ -7,6 +7,7 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Сategory
         fields = ['title']
+        exclude = ['author']
 
 
 # Форма продукта
