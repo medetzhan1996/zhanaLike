@@ -77,6 +77,9 @@ class Product(ItemBase):
         ('text_input', 'Набор текста'),
         ('image_select', 'Выбор изображения')
     ]
+    category = models.ForeignKey(Сategory,
+                                 related_name='products_category',
+                                 on_delete=models.CASCADE)
     file = models.FileField(upload_to='images')
     file_extra1 = models.FileField(
         upload_to='images', blank=True, null=True)
@@ -84,9 +87,6 @@ class Product(ItemBase):
         upload_to='images', blank=True, null=True)
     file_extra3 = models.FileField(
         upload_to='images', blank=True, null=True)
-    author_category = models.ForeignKey(
-        Сategory, related_name='products_category',
-        on_delete=models.CASCADE)
     description = HTMLField(blank=True, null=True)
     details = HTMLField(blank=True, null=True)
     shipping_return = HTMLField(blank=True, null=True)

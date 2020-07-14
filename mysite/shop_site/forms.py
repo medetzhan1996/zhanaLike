@@ -6,8 +6,7 @@ from .models import Сategory, Product
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Сategory
-        fields = ['title']
-        exclude = ['author']
+        fields = ['title', 'author']
 
 
 # Форма продукта

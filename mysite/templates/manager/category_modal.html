@@ -1,6 +1,7 @@
 {% load widget_tweaks %}
 <form method="POST" action="">
   {% csrf_token %}
+    <input type="hidden" name="author" value="{{user.id}}">
     <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Заказать </h5>
@@ -9,8 +10,10 @@
           </button>
         </div>
         <div class="modal-body">
+            {% if category %}
+              <input type="hidden" name="category_id" value="{{category.id}}">
+            {% endif %}
             <div class="form-group">
-            	<input type="text" name="author" value="{{user.id}}">
               	<label for="exampleInputEmail1">Введите название категории</label> <br>
               	{{category_form.title|add_class:"form-control"}}
             </div>
