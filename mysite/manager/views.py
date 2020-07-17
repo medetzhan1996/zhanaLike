@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateResponseMixin, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
-from shop_site.models import Product, Сategory
+from shop_site.models import Product, Сategory, Material, ProductMaterial
 from shop_site.forms import CategoryForm, ProductForm
 
 
@@ -30,7 +30,7 @@ class IndexView(LoginRequiredMixin, TemplateResponseMixin, View):
                     Product, id=request.GET.get('product_id'))
                 return render(request, 'manager/product_modal.html',
                               {'product_form': self.product_form_class(
-                                  instance=self.product),
+                                  request.user, instance=self.product),
                                'product': self.product})
             elif request.GET.get('category_edit', None):
                 self.category = get_object_or_404(
@@ -52,7 +52,7 @@ class IndexView(LoginRequiredMixin, TemplateResponseMixin, View):
         return self.render_to_response(
             {
                 'category_form': self.category_form_class(),
-                'product_form': self.product_form_class(),
+                'product_form': self.product_form_class(request.user),
                 'categories': self.categories,
                 'products': self.products,
                 'product': self.product,
@@ -75,10 +75,11 @@ class IndexView(LoginRequiredMixin, TemplateResponseMixin, View):
             if product_id:
                 product = get_object_or_404(Product, id=product_id)
                 product_form = self.product_form_class(
-                    request.POST, request.FILES, instance=product)
+                    request.user, request.POST,
+                    request.FILES, instance=product)
             else:
                 product_form = self.product_form_class(
-                    request.POST, request.FILES)
+                    request.user, request.POST, request.FILES)
             if product_form.is_valid():
                 product_form.save()
             else:
@@ -87,33 +88,69 @@ class IndexView(LoginRequiredMixin, TemplateResponseMixin, View):
             Сategory.objects.filter(id=request.POST.get(
                 'category_id'), author=request.user.id).delete()
         elif request.POST.get('product-remove-submit', None):
-            Сategory.objects.filter(id=request.POST.get(
+            Product.objects.filter(id=request.POST.get(
                 'product_id'), author=request.user.id).delete()
         return redirect('manager:index')
 
 
-# Главная страница менеджера
-class ProductDetailView(LoginRequiredMixin, TemplateResponseMixin, View):
-    template_name = 'manager/product_text_detail.html'
+# Mixin продукта
+class ProductMixin(LoginRequiredMixin, TemplateResponseMixin, View):
     product_form_class = ProductForm
-    products = None
+    product = None
+    product_materials = None
 
     def dispatch(self, *args, **kwargs):
         self.product = get_object_or_404(Product, id=self.kwargs['id'])
+        self.product_materials = ProductMaterial.objects.filter(
+            product=self.kwargs['id']).all()
         return super().dispatch(*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        product_form = self.product_form_class(
+            request.user, request.POST,
+            request.FILES, instance=self.product)
+        if product_form.is_valid():
+            product_form.save()
+            for material, price in zip(
+                    request.POST.getlist('material_title'),
+                    request.POST.getlist('material_price')):
+                if material and price:
+                    obj, created = Material.objects.get_or_create(
+                        title=material)
+                    q = ProductMaterial(material=obj, product=self.product,
+                                        price=price)
+                    q.save()
+            if request.POST.get('send-material', None):
+                return redirect('manager:product_detail', self.kwargs['id'])
+            return redirect('manager:index')
+        return self.render_to_response({
+            'product': self.product, 'product_form': product_form,
+            'product_materials': self.product_materials})
+
+
+# Детальная информация текстового продукта
+class ProductDetailView(ProductMixin):
+    template_name = 'manager/product_text_detail.html'
 
     def get(self, request, *args, **kwargs):
         return self.render_to_response(
             {
                 'product': self.product,
-                'product_form': self.product_form_class(instance=self.product)
+                'product_form': self.product_form_class(
+                    request.user, instance=self.product),
+                'product_materials': self.product_materials
             })
 
-    def post(self, request, *args, **kwargs):
-        product_form = self.product_form_class(
-            request.POST, request.FILES, instance=self.product)
-        if product_form.is_valid():
-            product_form.save()
-            return redirect('manager:index')
-        return self.render_to_response({'product': self.product,
-                                        'product_form': product_form})
+
+# Детальная информация продукта c выбором изображения
+class ProductPhotoDetailView(ProductMixin):
+    template_name = 'manager/product_photo_detail.html'
+
+    def get(self, request, *args, **kwargs):
+        return self.render_to_response(
+            {
+                'product': self.product,
+                'product_form': self.product_form_class(
+                    request.user, instance=self.product),
+                'product_materials': self.product_materials
+            })

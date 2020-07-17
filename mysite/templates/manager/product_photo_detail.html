@@ -102,24 +102,17 @@
                             <label for="validationTooltipUsername">Пред. осмотр: </label>
                             <span id="preview-content" class="font-anastasiaScriptC color-gold font-style"></span>
                             <input type="text" id="preview-text" class="form-field form-contact"  placeholder="Введите имя или текст ...">
-                            <select name="classes">
-                              <option value=""></option>
-                              <option value="font-aiv2" {% selected_option "font-aiv2" product_form.classes.value %}>Пример</option>
+                            <select>
+                              <option class="font-aiv2">other</option>
                             </select>
                           </div>
                           <div class="form-group">
                             <label for="exampleFormControlSelect1">Выберите материал:</label>
-                            <button type="button" class="ul-btn" data-toggle="modal" data-target="#exampleModal">Добавить</button>
+                            <button class="ul-btn" data-toggle="modal" data-target="#exampleModal">Добавить</button>
                             <ul class="category-menu">
-                              {% for  value in product_materials %}
-                                <li >
-                                  <a href="#">{{value.material.title}} / {{value.price}} тг </a> 
-                                  <span class="li-span">
-                                    <i class="fa fa-pencil" aria-hidden="true" data-toggle="modal" data-target="#exampleModal"></i>
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                  </span>
-                                </li>  
-                              {% endfor %}                 
+                              <li >
+                                <a href="#">Серебро </a> <span class="li-span"><i class="fa fa-pencil" aria-hidden="true" data-toggle="modal" data-target="#exampleModal"></i>&nbsp&nbsp<i class="fa fa-trash" aria-hidden="true"></i></span>
+                              </li>                   
                             </ul>
                           </div>
                       </div>
@@ -161,57 +154,6 @@
               <div class="theme-setting-wrapper">
                 <div id="settings-trigger"><button type="submit" class="btn-s"><i class="fa fa-check"></i></button></div>
               </div>
-              <!-- Modal -->
-              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Информация о материале </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <table class="table table-bordered">
-                          <tr>
-                            <th>Наименование</th>
-                            <th>Стоимость</th>
-                          </tr>
-                          {% for  value in product_materials %}
-                            <tr id="content-{{value.id}}">
-                              <td>
-                                <input type="text" name="material_title" value="{{value.material.title}}" class="form-control">
-                              </td>
-                              <td>
-                                <input type="number" name="material_price" value="{{value.price}}" class="form-control">
-                              </td>
-                              <td>
-                                <button class="btn btn-danger btn-xs remove-content" data-id="{{value.id}}">x</button>
-                              </td>
-                            </tr>
-                          {% endfor %}
-                          <tr>
-                            <td>
-                              <input type="text" name="material_title" class="form-control">
-                            </td>
-                            <td>
-                              <input type="number" name="material_price" class="form-control">
-                            </td>
-                            <td>
-                              <button class="btn btn-success btn-xs add-content">+</button>
-                            </td>
-                          </tr>
-                          <tbody id="append-content"></tbody>
-                        </table>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Закрыть</button>
-                        <input type="submit" name="send-material" class="btn btn-sm btn-primary" value="Отправить">
-                      </div>
-                  </div>
-                </div>
-              </div>
-              <!-- Modal -->
             </form>
             <!-- RELATED PRODUCTS section -->
             <!-- Footer section -->
@@ -236,6 +178,102 @@
       </div>
       <!-- main-panel ends -->
       
+{% endblock %}
+{% block modal %}
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <form method="GET" action="">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Заказать </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Добавить материал:</label>
+              <input type="text" class="form-field" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="имя">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Введите номер телефона</label>
+              <input type="tel" class="form-field" id="exampleInputPassword1" placeholder="номер телефон">
+            </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Закрыть</button>
+              <input type="submit" name="send-order" class="btn btn-sm btn-primary" value="Отправить">
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Modal -->
+  <!-- Modal -->
+  <div class="modal fade" id="fileExtraModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <form method="POST" action=""  enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Выберите изображения: </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div id="content-title" class="content-field" hidden>
+                {{product_form.title|add_class:"form-field"}}
+              </div>
+              <div id="content-author" class="content-field" hidden>
+                {{product_form.author|add_class:"form-field"}}
+              </div>
+              <div id="content-author_category" class="content-field" hidden>
+                {{product_form.author_category|add_class:"form-field"}}
+              </div>
+              <div id="content-description" class="content-field" hidden>
+                {{product_form.shipping_return|add_class:"form-field"}}
+              </div>
+              {{product_form.details}}
+              {{product_form.description|add_class:"form-field"}}
+              <div id="content-price" class="content-field" hidden>
+                {{product_form.price|add_class:"form-field"}}
+              </div>
+              <div id="content-price_old" class="content-field" hidden>
+                {{product_form.price_old|add_class:"form-field"}}
+              </div>
+              <div id="content-is_top" class="content-field" hidden>
+                {{product_form.is_top|add_class:"form-field"}}
+              </div>
+              <div id="content-kind" class="content-field" hidden>
+                {{product_form.kind|add_class:"form-field"}}
+              </div>
+              <div id="content-classes" class="content-field" hidden>
+                {{product_form.classes|add_class:"form-field"}}
+              </div>
+              <div id="content-materials" class="content-field" hidden>
+                {{product_form.materials|add_class:"form-field"}}
+              </div>
+              <div id="content-file_extra1" class="content-field" hidden>
+                {{product_form.file_extra1|add_class:"form-field"}}
+              </div>
+              <div id="content-file_extra2" class="content-field" hidden>
+                {{product_form.file_extra2|add_class:"form-field"}}
+              </div>
+              <div id="content-file_extra3" class="content-field" hidden>
+                {{product_form.file_extra3|add_class:"form-field"}}
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Закрыть</button>
+              <input type="submit" name="update-image" class="btn btn-sm btn-primary" value="Отправить">
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Modal -->
 {% endblock %}
 {% block domready %}
   $.uploadPreview({
@@ -270,27 +308,5 @@
     label_selected: "Change File",  // Default: Change File
     no_label: false                 // Default: false
   });
-  // Удалить данные товар
-  $(document).on('click', '.remove-content', function(){
-    event.preventDefault()
-    $(this).closest('tr').remove()
-  })
-  $(document).on('click', '.add-content', function(){
-    event.preventDefault()
-    var output = ''
-    output += '<tr>'
-    output += '<td>'
-    output += '<input type="text" name="material_title" value="" class="form-control">'
-    output += '</td>'
-    output += '<td>'
-    output += '<input type="text" name="material_price" value="" class="form-control">'
-    output += '</td>'
-    output += '<td>'
-    output += '<button class="btn btn-danger btn-xs remove-content">x</button>'
-    output += '</td>'
-    output += '</tr>'
-    $('#append-content').append(output)
-  })
-  
 {% endblock %}
 

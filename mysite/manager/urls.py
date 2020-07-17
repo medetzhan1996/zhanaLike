@@ -8,4 +8,6 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('product/<int:id>', views.ProductDetailView.as_view(),
          name='product_detail'),
+    path('product_photo/<int:id>', views.ProductPhotoDetailView.as_view(),
+         name='product_photo_detail'),
 ]
