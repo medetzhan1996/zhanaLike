@@ -22,7 +22,7 @@ def product_url(kind):
 
 
 @register.simple_tag
-def selected_option(val1, val2):
+def is_selected(val1, val2):
     if val1 == val2:
         return 'selected'
     else:

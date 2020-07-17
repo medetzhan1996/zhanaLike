@@ -104,7 +104,8 @@
                             <input type="text" id="preview-text" class="form-field form-contact"  placeholder="Введите имя или текст ...">
                             <select name="classes">
                               <option value=""></option>
-                              <option value="font-aiv2" {% selected_option "font-aiv2" product_form.classes.value %}>Пример</option>
+                              <option value="font-aiv2" {% is_selected "font-aiv2" product_form.classes.value %}>Пример</option>
+                              <option value="font-SharonAP" {% is_selected "font-SharonAP" product_form.classes.value %}>Пример2</option>
                             </select>
                           </div>
                           <div class="form-group">
