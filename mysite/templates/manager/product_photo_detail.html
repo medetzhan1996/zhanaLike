@@ -99,25 +99,19 @@
                       </h3>
                       <div class="input-text-modal">
                         <div class="form-group">
-                          <p class="AnastasiaScriptC">jghghg</p>
-                            <label for="validationTooltipUsername">Пред. осмотр: </label>
+                            <label for="validationTooltipUsername">Выбор фона изображения: </label>
                             <span id="preview-content" class="font-anastasiaScriptC color-gold font-style"></span>
-                            <input type="text" id="preview-text" class="form-field form-contact"  placeholder="Введите имя или текст ...">
-                            <select name="classes">
-                              <option value=""></option>
-                              <option value="font-aiv2" {% is_selected "font-aiv2" product_form.classes.value %}>Пример</option>
-                              <option value="font-SharonAP" {% is_selected "font-SharonAP" product_form.classes.value %}>Пример2</option>
-                            </select>
+                            <button type="button" class="ul-btn" data-toggle="modal" data-target="#imageFontModal">Добавить</button>
                           </div>
                           <div class="form-group">
                             <label for="exampleFormControlSelect1">Выберите материал:</label>
-                            <button type="button" class="ul-btn" data-toggle="modal" data-target="#exampleModal">Добавить</button>
+                            <button type="button" class="ul-btn" data-toggle="modal" data-target="#materialModal">Добавить</button>
                             <ul class="category-menu">
                               {% for  value in product_materials %}
                                 <li >
                                   <a href="#">{{value.material.title}} / {{value.price}} тг </a> 
                                   <span class="li-span">
-                                    <i class="fa fa-pencil" aria-hidden="true" data-toggle="modal" data-target="#exampleModal"></i>
+                                    <i class="fa fa-pencil" aria-hidden="true" data-toggle="modal" data-target="#materialModal"></i>
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                   </span>
                                 </li>  
@@ -164,11 +158,11 @@
                 <div id="settings-trigger"><button type="submit" class="btn-s"><i class="fa fa-check"></i></button></div>
               </div>
               <!-- Modal -->
-              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+              <div class="modal fade" id="materialModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Информация о материале </h5>
+                        <h5 class="modal-title" id="materialModalLabel">Информация о материале </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
@@ -204,6 +198,48 @@
                             </td>
                           </tr>
                           <tbody id="append-content"></tbody>
+                        </table>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <input type="submit" name="send-material" class="btn btn-sm btn-primary" value="Отправить">
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Modal -->
+              <!-- Modal -->
+              <div class="modal fade" id="imageFontModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="materialModalLabel">Выбор изображения фона </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <table class="table table-bordered">
+                          <tr>
+                            <td colspan="2">
+                              Выберите категорию
+                              <select class="form-control">
+                                <option></option>
+                                <option>Сотовые телефоны</option>
+                                <option>Кулоны</option>
+                              </select>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style="{% background_image product.file %};height: 230px;"></td>
+                            <td style="{% background_image product.file_extra1 %};height: 230px;"></td>
+                          </tr>
+                          <tr>
+                            <td colspan="2">
+                              1 &nbsp&nbsp 2 &nbsp&nbsp 3 &nbsp&nbsp 4 &nbsp&nbsp
+                              5 &nbsp&nbsp 6 &nbsp&nbsp 7 &nbsp&nbsp
+                            </td>
+                          </tr>
                         </table>
                       </div>
                       <div class="modal-footer">
