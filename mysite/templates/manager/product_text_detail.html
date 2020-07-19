@@ -101,12 +101,37 @@
                         <div class="form-group">
                             <label for="validationTooltipUsername">Пред. осмотр: </label>
                             <span id="preview-content" class="font-anastasiaScriptC color-gold font-style"></span>
-                            <input type="text" id="preview-text" class="form-field form-contact"  placeholder="Введите имя или текст ...">
-                            <select name="classes" class="form-control">
-                              <option value=""></option>
-                              <option value="font-aiv2" {% is_selected "font-aiv2" product_form.classes.value %} class="font-anastasiaScriptC font-style">Айгерим</option>
-                              <option value="font-SharonAP" class="font-aiv2 font-style">Айгерим</option>
-                            </select>
+                            <div class="input-group">
+                              <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                              <div class="input-group-append">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                                <div class="dropdown-menu">
+                                  <a class="dropdown-item" class="font-anastasiaScriptC font-style" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                  <div role="separator" class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Separated link</a>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-6">
+                                <input type="text" id="preview-text" class="form-field font-aiv2  form-control"  placeholder="Введите имя или текст ...">
+                              </div>
+                              <div class="col-md-6">
+                                <select name="classes" class="form-control">
+                                  <option value=""></option>
+                                  <option value="font-aiv2" {% is_selected "font-aiv2" product_form.classes.value %} class="font-anastasiaScriptC font-style">Айгерим</option>
+                                  <option value="font-SharonAP" class="font-aiv2 font-style">Айгерим</option>
+                                </select>
+                                <input list="browsers" name="browser" id="browser" class="form-control">
+                                <datalist id="browsers">
+                                  <option class="font-anastasiaScriptC font-style" value="Айгерим"></option>
+                                  <option value="Айгерим">
+                                </datalist>
+                              </div>
+                            </div>
                           </div>
                           <div class="form-group">
                             <label for="exampleFormControlSelect1">Выберите материал:</label>
