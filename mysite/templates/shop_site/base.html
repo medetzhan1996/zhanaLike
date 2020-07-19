@@ -59,9 +59,9 @@
           <!-- menu -->
           <ul class="main-menu">
             <li><a href="#">Главная страница</a></li>
-            <li><a href="#">Для парня / отца</a></li>
+            <!--li><a href="#">Для парня / отца</a></li>
             <li><a href="#">Для девушки / мамы</a></li>
-            <li><a href="#">для новорожденного</a></li>
+            <li><a href="#">для новорожденного</a></li-->
           </ul>
         </div>
       </nav>
@@ -85,5 +85,11 @@
       </div>
     </section>
     <!-- Footer section end -->
+    <script type="text/javascript">
+      $(document).ready(function(){
+        {% block domready %}
+        {% endblock %}
+      });  
+    </script>
   </body>
 </html>

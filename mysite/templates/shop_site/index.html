@@ -9,9 +9,9 @@
 					<div class="filter-widget">
 						<h2 class="fw-title">Категории</h2>
 						<ul class="category-menu">
-							{% for  auth_category in auth_categories %}
+							{% for  category in categories %}
 								<li>
-									<a href="{% url 'shop-site:index' author=author category=auth_category.category.id %}">{{auth_category.category.title}}</a>
+									<a href="{% url 'shop-site:index' author=author category=category.id %}">{{category.title}}</a>
 								</li>
 							{% empty %}
 							<li>
