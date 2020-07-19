@@ -60,6 +60,8 @@
 						    <label for="validationTooltipUsername">Пред. осмотр: </label>
 						    <span id="preview-content" class="{{product.classes}}"></span>
 						    <input type="text" id="preview-text" class="form-control form-contact"  placeholder="Введите имя или текст ..." required>
+						    <br>
+						    <button type="button" id="send-message" class="form-control btn btn-primary">Отправить</button>
 						</div>
 						{% if product_materials %}
 						    <div class="form-group">
@@ -195,8 +197,28 @@
 	</section>
 {% endblock %}
 {% block domready %}
+/* WebSocket begin */
+var url = 'ws://' + window.location.host +
+            '/ws/shop/product/'+{{author}}+'/';
+var shopSiteSocket = new WebSocket(url);
+	shopSiteSocket.onmessage = function(e) {
+    var data = JSON.parse(e.data);
+    var message = data.message;
+    alert(message)
+};
+shopSiteSocket.onclose = function(e) {
+    console.error('Chat socket closed unexpectedly');
+};
+
+$(document).on('click', '#send-message', function(){
+	var message = $('#preview-text').val()
+	shopSiteSocket.send(JSON.stringify({'message': message}));
+	alert('message send!')
+})
+/* WebSocket end */
 $(document).on('change', '.product_material ', function(){
 	var price = $(this).children('option:selected').data('price') 
 	$('#price-content').html(price+' '+' тг')
 })
+
 {% endblock %}
