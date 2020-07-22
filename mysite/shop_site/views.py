@@ -3,7 +3,7 @@ from django.views.generic.detail import DetailView
 from django.shortcuts import get_object_or_404
 from dal import autocomplete
 from django.contrib.auth.models import User
-from .models import Сategory, AuthorСategory, Product, ProductMaterial
+from .models import Сategory, Product, ProductMaterial
 # List views
 
 
@@ -19,7 +19,7 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         author = self.kwargs['author']
         category = self.kwargs.get('category', None)
-        context['auth_categories'] = AuthorСategory.objects.filter(
+        context['categories'] = Сategory.objects.filter(
             author=author).all()
         if not category:
             context['products'] = Product.objects.filter(
@@ -27,7 +27,7 @@ class IndexView(TemplateView):
         else:
             context['category'] = get_object_or_404(Сategory, id=category)
             context['products'] = Product.objects.filter(
-                author_category__category__id=category, author=author)[:12]
+                category__id=category, author=author)[:12]
         return context
 
 
@@ -42,6 +42,7 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['author'] = self.kwargs['author']
         context['product_materials'] = ProductMaterial.objects.filter(
             product__id=self.object.id).all()
         return context

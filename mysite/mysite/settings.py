@@ -37,8 +37,10 @@ SENDSMS_BACKEND = 'myapp.mysmsbackend.SmsBackend'
 # Application definition
 
 INSTALLED_APPS = [
+    'chat',
     'shop_site',
     'manager',
+    'channels',
     'dal',
     'pwa',
     'tinymce',
@@ -84,6 +86,7 @@ TINYMCE_DEFAULT_CONFIG = {
     'height': 280
 }
 WSGI_APPLICATION = 'mysite.wsgi.application'
+ASGI_APPLICATION = 'mysite.routing.application'
 PWA_APP_NAME = 'euro-standart'
 PWA_APP_DESCRIPTION = "euro-standart description"
 PWA_APP_DEBUG_MODE = False
@@ -102,6 +105,14 @@ DATABASES = {
     }
 }
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
